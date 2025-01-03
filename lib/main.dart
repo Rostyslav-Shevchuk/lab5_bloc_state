@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'bloc/counter_bloc.dart'; 
+import 'bloc/counter_bloc.dart';
+import 'bloc/text_bloc.dart'; // Переконайтеся, що шлях правильний
+import 'TextScreen.dart'; // Імпортуйте екран TextScreen
 
 void main() {
   runApp(const MyApp());
@@ -13,8 +15,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Lab 5: BLoC State Management',
-      home: BlocProvider(
-        create: (context) => CounterBloc(),
+      home: MultiBlocProvider(
+        providers: [
+          BlocProvider(create: (context) => CounterBloc()),
+          BlocProvider(create: (context) => TextBloc()),
+        ],
         child: const MyHomePage(),
       ),
     );
@@ -41,7 +46,7 @@ class MyHomePage extends StatelessWidget {
               builder: (context, state) {
                 return Text(
                   '${state.counterValue}',
-                  style: Theme.of(context).textTheme.headlineMedium, // Оновлено
+                  style: Theme.of(context).textTheme.headlineMedium,
                 );
               },
             ),
@@ -62,6 +67,16 @@ class MyHomePage extends StatelessWidget {
                   child: const Text('+'),
                 ),
               ],
+            ),
+            const SizedBox(height: 30),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => TextScreen()),
+                );
+              },
+              child: const Text('Ввести текст'),
             ),
           ],
         ),
