@@ -13,14 +13,14 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Lab 5: BLoC State Management',
-      home: MultiBlocProvider(
-        providers: [
-          BlocProvider(create: (context) => CounterBloc()),
-          BlocProvider(create: (context) => TextBloc()),
-        ],
-        child: const MyHomePage(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (context) => CounterBloc()),
+        BlocProvider(create: (context) => TextBloc()),
+      ],
+      child: MaterialApp(
+        title: 'Lab 5: BLoC State Management',
+        home: const MyHomePage(),
       ),
     );
   }
@@ -68,12 +68,17 @@ class MyHomePage extends StatelessWidget {
                 ),
               ],
             ),
-            const SizedBox(height: 30),
+            const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => TextScreen()),
+                  MaterialPageRoute(
+                    builder: (context) => BlocProvider.value(
+                      value: context.read<TextBloc>(),
+                      child: TextScreen(), // Використовуємо TextScreen
+                    ),
+                  ),
                 );
               },
               child: const Text('Ввести текст'),
